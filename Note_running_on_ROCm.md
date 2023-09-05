@@ -1,9 +1,9 @@
 # Create environment for running LLMs
 
-Run below command to download the right docker image that has pytorch and other libraries for ROCm:
+Download the right docker image that has pytorch and other libraries for ROCm:
 
 ```bash
-(sudo) docker run -tid --privileged --network=host --shm-size=64GB --ulimit core=-1 --ulimit memlock=-1 --ulimit stack=67108864 --security-opt seccomp=unconfined --ipc=host --device=/dev/kfd --device=/dev/dri --group-add video -v /:/dockerx rocm/pytorch:rocm5.6_ubuntu20.04_py3.8_pytorch_2.0.1 
+rocm/pytorch:rocm5.6_ubuntu20.04_py3.8_pytorch_2.0.1 
 ```
 
 
