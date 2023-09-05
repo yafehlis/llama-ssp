@@ -13,10 +13,18 @@ from termcolor import colored
 torch.manual_seed(1339)
 
 MAX_NEW_TOKENS = 64
+
+# yafehlis add model names for paths in the docker file system - start docker in '/home/yafehlis'. 
 llama7b_name = 'decapoda-research/llama-7b-hf'
 llama13b_name = 'decapoda-research/llama-13b-hf'
 llama30b_name = 'decapoda-research/llama-30b-hf'
 llama65b_name = 'decapoda-research/llama-65b-hf'
+
+llama7b_name_path = "/workspace/.cache/huggingface/hub/model-7B"
+llama13b_name_path = "/workspace/.cache/huggingface/hub/model-13B"
+llama30b_name_path = "/workspace/.cache/huggingface/hub/model-30B"
+llama65b_name_path = "/workspace/.cache/huggingface/hub/model-65B"
+
 batch_size = 1
 
 texts = [
@@ -37,7 +45,10 @@ texts = [
     'The waves crashed against the shore, a never-ending cycle of destruction and creation.',
     'I woke up to find myself in a strange place, with no memory of how I got there.',
     'The clock struck midnight, and I knew that my life would never be the same.',]
-tokenizer = LlamaTokenizer.from_pretrained(llama7b_name)
+
+# yafehlis load the tokenizer from disk
+#tokenizer = LlamaTokenizer.from_pretrained(llama7b_name)
+tokenizer = LlamaTokenizer.from_pretrained(llama7b_name_path)
 
 free_in_GB = int(torch.cuda.mem_get_info()[0]/1024**3)
 max_mem = f'{int(torch.cuda.mem_get_info()[0]/1024**3)-2}GB'
@@ -79,24 +90,25 @@ def print_results(tokens_s, outputs, name='Noname'):
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
     print("========\n")
 
-
+# yafehlis
+# change model name to model_name_path to load saved models
 models_params = {
-    '7B_8bit': {'model_name': llama7b_name,
+    '7B_8bit': {'model_name': llama7b_name_path,
                 'max_memory': max_memory(1),
                 'load_in_8bit': True},
-    '7B_8bit_4': {'model_name': llama7b_name,
+    '7B_8bit_4': {'model_name': llama7b_name_path,
                   'max_memory': max_memory(4),
                   'load_in_8bit': True},
-    '7B': {'model_name': llama7b_name,
+    '7B': {'model_name': llama7b_name_path,
            'max_memory': max_memory(1),
            'load_in_8bit': False},
-    '7B_8': {'model_name': llama7b_name,
+    '7B_8': {'model_name': llama7b_name_path,
              'max_memory': max_memory(8),
              'load_in_8bit': False},
-    '13B_8bit': {'model_name': llama13b_name,
+    '13B_8bit': {'model_name': llama13b_name_path,
                  'max_memory': max_memory(1),
                  'load_in_8bit': True},
-    '13B': {'model_name': llama13b_name,
+    '13B': {'model_name': llama13b_name_path,
             'max_memory': max_memory(2),
             'load_in_8bit': False},
     '30B_8bit': {'model_name': llama30b_name,
